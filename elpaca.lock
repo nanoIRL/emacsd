@@ -77,9 +77,10 @@
          (:source nil :package "auctex" :id auctex :host nil :repo
                   "https://git.savannah.gnu.org/git/auctex.git" :depth
                   nil :inherit nil :build
-                  (:sub elpaca-build-docs my-elpaca-build-auctex-info)
+                  ((:before elpaca-build-link my-elpaca-build-auctex-info)
+                   (:not elpaca-build-docs))
                   :files
-                  ("*.el" "doc/*.info*" "etc" "images" "latex" "style")
+                  ("*.el" "doc/*.info*" "doc/dir" "etc" "images" "latex" "style")
                   :type git :ref
                   "9316f5c71df63322eb54b0e536b63756dc7f8c76"))
  (avy :source "elpaca-menu-lock-file" :recipe

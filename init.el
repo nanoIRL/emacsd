@@ -5274,14 +5274,21 @@ complete document rather than just a previewed region."
     (call-interactively #'TeX-view)))
 
 (defun my-elpaca-build-auctex-info (e)
-  "Build AUCTeX Info manuals for Elpaca package E."
-  (if-let* ((makeinfo elpaca-makeinfo-executable))
-      (let ((default-directory (expand-file-name "doc" (elpaca<-source-dir e))))
-        (dolist (manual '("auctex.texi" "preview-latex.texi"))
-          (unless (zerop (elpaca--call-with-log e 0 makeinfo "--no-split" manual))
-            (elpaca--fail e (format "makeinfo failed for %s" manual))))
-        (elpaca--continue-build e "AUCTeX Info compiled"))
-    (elpaca--continue-build e "No elpaca-makeinfo-executable")))
+  "Build AUCTeX Info manuals and their directory before linking package E."
+  (let ((default-directory (elpaca<-source-dir e)))
+    (unless (and elpaca-makeinfo-executable elpaca-install-info-executable)
+      (elpaca--fail e "AUCTeX manuals require makeinfo and install-info"))
+    ;; The upstream target also generates version.texi and preview-dtxdoc.texi.
+    (unless (zerop (car (elpaca--call-with-log
+                   e 0 "make"
+                   (concat "MAKEINFO=" (shell-quote-argument elpaca-makeinfo-executable))
+                   (concat "INSTALL_INFO=" (shell-quote-argument elpaca-install-info-executable))
+                   "doc/dir")))
+      (elpaca--fail e "Building AUCTeX Info manuals failed"))
+    ;; Rediscover the generated files even if Elpaca cached the file list.
+    (setf (elpaca<-files e) nil)
+    (elpaca-note e "AUCTeX Info compiled and indexed")
+    (elpaca-continue e)))
 
 (use-package-full latex
   :ensure `(auctex
@@ -5291,8 +5298,9 @@ complete document rather than just a previewed region."
                      "https://git.savannah.gnu.org/git/auctex.git")
             :depth nil
             :inherit nil
-            :build (:sub elpaca-build-docs my-elpaca-build-auctex-info)
-            :files ("*.el" "doc/*.info*" "etc" "images" "latex" "style"))
+            :build ((:before elpaca-build-link my-elpaca-build-auctex-info)
+                    (:not elpaca-build-docs))
+            :files ("*.el" "doc/*.info*" "doc/dir" "etc" "images" "latex" "style"))
   ;; :demand                             ; otherwise, madness ensues.
   :config
   (setopt preview-image-type 'dvi*)
