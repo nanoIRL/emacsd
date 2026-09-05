@@ -4597,6 +4597,12 @@ instead of toggling."
   (interactive)
   (my/agent-shell--call-or-self-insert #'agent-shell-ui-toggle-fragment))
 
+(use-package latex-to-svg-backend
+  :ensure (:host github :repo "alberti42/latex-to-svg-backend")
+  :demand t
+  :config
+  (setopt latex-to-svg-backend-font-scale (/ 4.0 3.0))  )
+
 (use-package agent-shell-math-renderer
   :ensure (:host github :repo "ultronozm/agent-shell-math-renderer"
                  :depth nil
@@ -4605,10 +4611,10 @@ instead of toggling."
                  :build (:not elpaca-build-compile)
                  :remotes ("origin"
                            ("upstream" :repo "alberti42/agent-shell-math-renderer")))
-  :after agent-shell
+  :after (agent-shell latex-to-svg-backend)
   :demand t
+  :hook (agent-shell-mode . agent-shell-math-renderer-mode)
   :custom
-  (agent-shell-math-renderer-enabled t)
   ;; Generic tex/latex fences often contain prose snippets, not
   ;; standalone equations.  Render only explicit math fences.
   (agent-shell-math-renderer-fence-languages '("math"))
