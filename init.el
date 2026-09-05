@@ -5148,16 +5148,7 @@ The value of `calc-language` is restored after BODY has been processed."
 
 (use-package diff-hl
   :ensure (:host github
-                 :repo "ultronozm/diff-hl"
-                 :branch "ediff"
-                 ;; Full clone: fetching the upstream remote into elpaca's
-                 ;; default treeless (--filter=tree:0) clone fails the object
-                 ;; connectivity check ("missing blob object").
-                 :depth nil
-                 ;; Track the branch on origin (our fork): list "origin" first
-                 ;; so elpaca-git--checkout-ref tracks origin/ediff, not
-                 ;; upstream/ediff (dgutov deleted that branch after merging).
-                 :remotes ("origin" ("upstream" :repo "dgutov/diff-hl")))
+                 :repo "dgutov/diff-hl")
   :defer t
   :bind
   ("H-d" . diff-hl-mode)
