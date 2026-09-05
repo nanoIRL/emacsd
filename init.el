@@ -4564,7 +4564,7 @@ Signal an error when `my-agent-shell-transcripts-dir' is unset."
            "GITHUB_MCP_PAT" (my/getenv "GITHUB_MCP_PAT")))
   (setopt agent-shell-opencode-authentication
           (agent-shell-opencode-make-authentication :none t))
-  (setopt agent-shell-opencode-default-model-id "assist/kimi")
+  (setopt agent-shell-opencode-default-model-id "assist/glm-5.3-flash-max")
   (setopt agent-shell-opencode-environment
           (append
            (when-let* ((key (my/getenv "ASSIST_API_KEY")))
