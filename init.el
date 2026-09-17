@@ -4573,6 +4573,15 @@ Signal an error when `my-agent-shell-transcripts-dir' is unset."
   (setopt agent-shell-transcript-file-path-function
           #'my/agent-shell-transcript-file-path-function))
 
+(with-eval-after-load 'agent-shell-markdown
+  (defun my-agent-shell-open-pdf-internally (original file)
+    (if (equal (downcase (or (file-name-extension file) "")) "pdf")
+        (agent-shell-markdown-visit-file :file file)
+      (funcall original file)))
+
+  (advice-add 'agent-shell-markdown--open-externally :around
+              #'my-agent-shell-open-pdf-internally))
+
 (defun my/agent-shell--call-or-self-insert (command)
   "Run COMMAND unless we should insert at the prompt instead.
 
