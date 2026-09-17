@@ -1055,6 +1055,11 @@ positions you navigated to during the Ediff session."
 (font-lock-add-keywords 'Info-mode '((" -- \\([^:]+\\): \\_<\\(.+\\)\\_>" . 2)))
 (font-lock-add-keywords 'Info-mode '(("‘\\<\\([^’]+\\)\\>’" . 1)))
 
+(with-eval-after-load 'info
+  (let ((directory "/Library/TeX/Root/texmf-dist/doc/info"))
+    (when (file-directory-p directory)
+      (add-to-list 'Info-directory-list directory))))
+
 (use-package doc-view
   :ensure nil
   :bind
