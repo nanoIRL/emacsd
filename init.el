@@ -4670,6 +4670,19 @@ instead of toggling."
   (require 'knockknock)
   (setopt agent-shell-attention-notify-function
           (lambda (_buffer title body)
+            ;; A quiet, soft pulse for completed turns.
+            (when (and (equal body "Finished")
+                       (eq system-type 'darwin)
+                       (file-executable-p "/usr/bin/afplay")
+                       (file-readable-p "/System/Library/Sounds/Purr.aiff"))
+              (make-process
+               :name "agent-shell-completion-sound"
+               :command '("/usr/bin/afplay" "-v" "0.25"
+                          "/System/Library/Sounds/Purr.aiff")
+               :connection-type 'pipe
+               :buffer nil
+               :noquery t
+               :sentinel #'ignore))
             (knockknock-notify
              :title title
              :message (mapconcat
