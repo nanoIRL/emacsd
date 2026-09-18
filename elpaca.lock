@@ -31,14 +31,14 @@
       (:source "elpaca-menu-lock-file" :package "acp" :id acp :host
                github :repo "xenodium/acp.el" :depth nil :inherit t
                :type git :ref
-               "3ddfa907eb7f17949a4a8e731ea5c5241e6cbcb4" :protocol
+               "0f2cac4f9ee7998145a1d4710eb1ea5b2fa9d98f" :branch "main" :protocol
                https))
  (agent-shell :source "elpaca-menu-lock-file" :recipe
               (:source "elpaca-menu-lock-file" :package "agent-shell"
                        :id agent-shell :host github :repo
                        "xenodium/agent-shell" :depth nil :inherit t
                        :type git :ref
-                       "66afc5787f5a5bbe8ef21f4fc6cd5ff084aa6a1a"
+                       "cc24345e9db2a205f7b8821015f89be3de7dd1e4" :branch "main"
                        :protocol https))
  (aggressive-indent :source "elpaca-menu-lock-file" :recipe
                     (:package "aggressive-indent" :repo
@@ -835,7 +835,7 @@
                        :id shell-maker :host github :repo
                        "xenodium/shell-maker" :depth nil :inherit t
                        :type git :ref
-                       "43ee9e1862994cbaa89715d324edb7a424181f22"
+                       "f448a74a8eded23aa42f8d60a41c5d8d3a183d07" :branch "main"
                        :protocol https))
  (swiper :source "elpaca-menu-lock-file" :recipe
          (:package "swiper" :repo "abo-abo/swiper" :fetcher github

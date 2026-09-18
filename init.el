@@ -79,16 +79,10 @@ Prefer the current Emacs environment.  Fall back to
     (setq-local TeX-master my-preview-master)))
 
 (when (string-equal system-type "darwin")
-  (setq ns-command-modifier nil)
-  (setq ns-right-control-modifier 'super)
+  (setq ns-option-modifier 'none)
+  (setq ns-command-modifier 'meta)
   (setq ns-function-modifier 'hyper)
-  (setq ns-right-option-modifier 'super))
-
-(when (string-equal system-type "windows-nt")
-  (setq w32-lwindow-modifier 'super)
-  (setq w32-apps-modifier 'hyper)
-  (w32-register-hot-key [s-])
-  (w32-register-hot-key [s]))
+  (setq ns-right-command-modifier 'hyper))
 
 ;;; core commands
 
@@ -2801,7 +2795,8 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
   :ensure (:host github :repo "ultronozm/emacs-src-redirect.el" :depth nil
                  :inherit nil)
   :custom
-  (emacs-src-redirect-lisp-dir "~/work/emacs/lisp")
+  (emacs-src-redirect-lisp-dir
+   (expand-file-name "lisp" my-emacs-source-dir))
   :config
   (emacs-src-redirect-mode))
 
@@ -3022,9 +3017,12 @@ them at the first newline."
 
 (use-package-full debbugs
   :defer t
-  ;; debbugs is a GNU ELPA package; let elpaca's GNU ELPA menu supply the
-  ;; recipe (the old github "emacs-mirror/debbugs" repo 404s).
-  :ensure t
+  ;; The lock file's historical GitHub mirror no longer exists.
+  :ensure (:repo "https://git.savannah.gnu.org/git/emacs/elpa.git"
+                 :branch "externals/debbugs"
+                 :depth nil
+                 :inherit nil
+                 :files (:defaults (:exclude ".git" "dir") "Debbugs.wsdl"))
   :custom
   (debbugs-gnu-mail-backend 'rmail)
   (debbugs-cache-expiry nil))
@@ -3729,7 +3727,6 @@ The content is escaped to prevent org syntax interpretation."
   (add-hook 'eshell-load-hook #'eat-eshell-mode)
   (add-hook 'eshell-load-hook #'eat-eshell-visual-command-mode)
   :config
-  (add-hook 'eat-mode-hook #'abbrev-mode)
   ;; Mutate the live keymaps rather than customizing
   ;; `eat-*-semi-char-non-bound-keys': the update functions those
   ;; require replace the keymap object, but `eat--semi-char-mode'
@@ -3873,6 +3870,8 @@ enters `lisp-interaction-mode' right after startup, so a bare
 
 (use-package-full gptel
   :ensure (:host github :repo "ultronozm/gptel"
+                 :depth nil
+                 :inherit nil
                  :remotes ("origin" ("upstream" :repo "karthink/gptel")))
   :after exec-path-from-shell
   :defer t
@@ -4074,7 +4073,9 @@ Skips empty days and diary holidays."
 
 (use-package-full shell-maker
   :ensure (:host github :repo "xenodium/shell-maker"
-                 :depth nil)
+                 :branch "main"
+                 :depth nil
+                 :inherit nil)
   :defer t
   :init
   (setopt shell-maker-transcript-default-path
@@ -4086,7 +4087,9 @@ Skips empty days and diary holidays."
 
 (use-package-full acp
   :ensure (:host github :repo "xenodium/acp.el"
-                 :depth nil)
+                 :branch "main"
+                 :depth nil
+                 :inherit nil)
   :defer t)
 
 ;;;;; container support
@@ -4528,7 +4531,9 @@ Signal an error when `my-agent-shell-transcripts-dir' is unset."
 
 (use-package agent-shell
   :ensure (:host github :repo "xenodium/agent-shell"
-                 :depth nil)
+                 :branch "main"
+                 :depth nil
+                 :inherit nil)
   :bind
   (:map agent-shell-mode-map
         ("o" . my/agent-shell-ui-toggle-fragment-or-self-insert)
@@ -5181,7 +5186,24 @@ The value of `calc-language` is restored after BODY has been processed."
 
 (use-package diff-hl
   :ensure (:host github
+<<<<<<< Updated upstream
                  :repo "dgutov/diff-hl")
+||||||| Stash base
+                 :repo "ultronozm/diff-hl"
+                 :branch "ediff"
+                 ;; Full clone: fetching the upstream remote into elpaca's
+                 ;; default treeless (--filter=tree:0) clone fails the object
+                 ;; connectivity check ("missing blob object").
+                 :depth nil
+                 ;; Track the branch on origin (our fork): list "origin" first
+                 ;; so elpaca-git--checkout-ref tracks origin/ediff, not
+                 ;; upstream/ediff (dgutov deleted that branch after merging).
+                 :remotes ("origin" ("upstream" :repo "dgutov/diff-hl")))
+=======
+                 :repo "dgutov/diff-hl"
+                 :depth nil
+                 :inherit nil)
+>>>>>>> Stashed changes
   :defer t
   :bind
   ("H-d" . diff-hl-mode)

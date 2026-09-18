@@ -26,13 +26,13 @@
 (setq use-package-enable-imenu-support t)
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
+(setq frame-resize-pixelwise t) ;; to make it work with hammerspoon window management
 (setq initial-frame-alist '(
                             ;; (fullscreen . fullboth)
                             (vertical-scroll-bars . nil)))
 (setq default-frame-alist '((vertical-scroll-bars . nil)
-                            ;; (width . 80) ;; default
-                            ;; (height . 36) ;; default
-                            (width . 120)
-                            (height . 54)))
+                             ;; (width . 80) ;; default
+                             ;; (height . 36) ;; default))
+                             ))
 (unless (display-graphic-p)
   (setq frame-background-mode 'light))
